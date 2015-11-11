@@ -2,10 +2,15 @@ import Promise from 'bluebird';
 import Horseman from 'node-horseman';
 
 class AmazonBot {
-  constructor(tld) {
+  constructor(tld, timeout = 2000) {
     this.baseUrl = 'https://amazon.' + tld;
 
-    this.horseman = new Horseman();
+    var options = {
+      loadImages: false,
+      timeout: timeout,
+      phantomPath: './node_modules/.bin/phantomjs'
+    };
+    this.horseman = new Horseman(options);
     this.userAgent = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:27.0) Gecko/20100101 Firefox/27.0';
     this.cookies = [];
 
@@ -66,15 +71,13 @@ class AmazonBot {
         .userAgent(this.userAgent)
         .cookies(this.cookies)
         .open(url)
-        .waitForSelector('form#addToCart')
+        .waitForSelector('form#addToCart') // TODO: removing this should not change anything
         .text('#nav-cart-count')
-        .then(function(text) {
-          itemAmount = parseInt(text.trim());
-        })
+        .then(function(text) { itemAmount = parseInt(text.trim()); })
         .click('form#addToCart input#add-to-cart-button')
-        .waitForNextPage()
-        .open(this.baseUrl)
-        .waitForNextPage()
+        .waitForNextPage()  // TODO: should be enough to wait for a selector
+        .open(this.baseUrl) // -------
+        .waitForNextPage()  // -------
         .text('#nav-cart-count')
         .then((text) => {
           let count = parseInt(text.trim());
@@ -84,9 +87,7 @@ class AmazonBot {
   }
 
   addItems(ids) {
-    return Promise.each(ids, (id) => {
-      return this.addItem(id);
-    });
+    return Promise.each(ids, (id) => { return this.addItem(id); });
   }
 
   getCartTotal() {
