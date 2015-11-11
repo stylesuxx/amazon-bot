@@ -2,7 +2,7 @@ import Promise from 'bluebird';
 import Horseman from 'node-horseman';
 
 class AmazonBot {
-  constructor(tld, timeout = 2000) {
+  constructor(tld, timeout = 5000) {
     this.baseUrl = 'https://amazon.' + tld;
 
     var options = {
