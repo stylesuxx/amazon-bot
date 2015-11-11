@@ -17,11 +17,11 @@ Usage comes here
 
 ## constructor
 #### AmazonBot(tld, timeout = 5000)
->tld is the top level domain you want to use, timeout defaults to 5000 which is also the pahntomjs default
+>*tld* is the Amazon top level domain you want to use, *timeout* defaults to 5000 which is also the pahntomjs default
 
 ## Methods
 #### login(username, password)
->Login with username and password - Resolves when login succeeds.
+>Login with Amazon *username* and *password* - Resolves when login succeeds.
 
 #### logout()
 >Logout - Resolves when logout succeeds.
@@ -30,10 +30,10 @@ Usage comes here
 >Closes phantom JS, call this when you are done taking actions
 
 #### addItem(id)
->Add a single item - Resolves when item could be added
+>Add a single item by its product *id* - Resolves when item could be added
 
 #### addItems(ids)
->Add multiple items at once, just pass an array of item ids - Resolves when items could be added
+>Add multiple items at once. *ids* is an array of product id's - Resolves when items could be added
 
 #### getCart()
 >Get details about all items in the shopping cart - Resolves when cart information is available
@@ -45,7 +45,7 @@ Usage comes here
 >Remove all items from the shopping cart - Resolves when succeeded in removing items from the cart
 
 #### redeem(code)
->Redeem a gift code - Resolves when succeeded in redeeming a gift code **Not tested with an actual gift code - if you do, please let me know in the issues**
+>Redeem a gift *code* - Resolves when succeeded in redeeming a gift code **Not tested with an actual gift code - if you do, please let me know in the issues**
 
 #### getBalance()
 >Get the current balance - Resolves when succeeded in obtaining balance
