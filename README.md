@@ -46,6 +46,9 @@ Usage comes here
 #### getTotal()
 >Get the current cart total including shipping - Resolves when payment information is available and succeeded in obtaining total
 
+#### getAddresses()
+>Get all available addresses - Resolves when address information is available
+
 ## Testing
 Since this is a scraper and relies on the Amazon page not changing, an extensive test suite is provided and may be invoked by running:
 
