@@ -103,3 +103,23 @@ test('Check balance', function(t) {
     .then(function() { return bot.logout(); })
     .then(function() { t.ok(true, 'Logout'); });
 });
+
+test('Check addresses', function(t) {
+  t.plan(6);
+
+  var bot = new AmazonBot('de', true);
+  bot
+    .login(testData.login.valid.user, testData.login.valid.pass)
+    .then(function() { t.ok(true, 'Login'); })
+    .then(function() { return bot.getAddresses(); })
+    .then(function(addresses) {
+      var address = addresses[0];
+
+      t.ok(address.name, 'Name');
+      t.ok((address.address1 || address.address2), 'Address');
+      t.ok(address.city, 'City');
+      t.ok(address.country, 'Country');
+    })
+    .then(function() { return bot.logout(); })
+    .then(function() { t.ok(true, 'Logout'); });
+});
