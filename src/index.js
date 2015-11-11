@@ -327,7 +327,7 @@ class AmazonBot {
               });
           }
           else {
-            reject('Payment information is missing');
+            reject('Payment information or address missing');
           }
         });
     });
