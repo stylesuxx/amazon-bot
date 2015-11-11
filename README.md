@@ -16,9 +16,8 @@ Usage comes here
 ```
 
 ## Available methods
-* login(username, password)
-
-    >Login with username and password - Resolves when login succeeds.
+### login(username, password)
+>Login with username and password - Resolves when login succeeds.
 
 * logout()
 
