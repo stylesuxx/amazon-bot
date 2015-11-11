@@ -15,12 +15,19 @@ This library heavily relies on the Amazon page not changing. It is very likely t
 Usage comes here
 ```
 
-## Available methods
+## constructor
+#### AmazonBot(tld, timeout = 5000)
+>tld is the top level domain you want to use, timeout defaults to 5000 which is also the pahntomjs default
+
+## Methods
 #### login(username, password)
 >Login with username and password - Resolves when login succeeds.
 
 #### logout()
->Logout - call this when you are done - Resolves when logout succeeds.
+>Logout - Resolves when logout succeeds.
+
+#### close()
+>Closes phantom JS, call this when you are done taking actions
 
 #### addItem(id)
 >Add a single item - Resolves when item could be added
