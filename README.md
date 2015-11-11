@@ -18,7 +18,7 @@ Usage comes here
 ## Available methods
 * login(username, password)
 
-    Login with username and password.
+    >Login with username and password.
 
 * logout()
 
