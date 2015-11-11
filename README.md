@@ -56,6 +56,9 @@ Usage comes here
 #### getAddresses()
 >Get all available addresses - Resolves when address information is available
 
+## Functionality
+There is a lot functionality on the Amazon page that the bot does not support. Feel free to submit issues - or even better PR's, for functionality you want to see.
+
 ## Testing
 Since this is a scraper and relies on the Amazon page not changing, an extensive test suite is provided and may be invoked by running:
 
