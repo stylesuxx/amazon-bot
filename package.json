@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "rm -rf lib",
     "build": "npm run clean && ./node_modules/.bin/babel src --out-dir lib",
-    "test": "npm run build && node ./tests/index.js",
+    "test": "npm run build && node ./tests/index.js | faucet",
     "lint": "./node_modules/.bin/eslint src",
     "prepublish": "npm run build",
     "preversion": "npm test"
