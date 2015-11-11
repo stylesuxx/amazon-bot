@@ -48,8 +48,11 @@ class AmazonBot {
     return this.horseman
       .userAgent(this.userAgent)
       .cookies(this.cookies)
-      .open(url)
-      .waitForNextPage()
+      .open(url);
+  }
+
+  close() {
+    return this.horseman
       .close();
   }
 
