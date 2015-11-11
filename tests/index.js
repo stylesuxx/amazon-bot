@@ -29,7 +29,7 @@ test('Login with invalid credentials', function(t) {
 });
 
 test('Add multiple items', function(t) {
-  t.plan(17);
+  t.plan(21);
 
   var bot = new AmazonBot('de');
   bot
@@ -61,9 +61,17 @@ test('Add multiple items', function(t) {
       t.equal(item.currency, 'EUR', 'Item currency');
       t.equal(item.price, 10.97, 'Item price');
     })
+    .then(function() { return bot.getTotal(); })
+    .then(function(total) {
+      t.equals(total.items, 21.14, 'Items');
+      t.equals(total.shipping, 0, 'Shipping');
+      t.equals(total.total, 21.14, 'Total');
+      t.equals(total.currency, 'EUR', 'Currency');
+    })
     .then(function() { return bot.logout(); })
     .then(function() { t.ok(true, 'Logout'); })
-    .catch(function() {
+    .catch(function(err) {
+      console.log('Rejected with reason:', err);
       bot.logout();
     });
 });
