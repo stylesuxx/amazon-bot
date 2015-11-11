@@ -1,5 +1,4 @@
 var test = require('tape');
-
 var AmazonBot = require('../');
 
 var testData = {
@@ -26,53 +25,8 @@ test('Login with invalid credentials', function(t) {
     .then(function() { t.ok(true, 'Logout'); });
 });
 
-test('Login with valid credentials', function(t) {
-  t.plan(2);
-
-  var bot = new AmazonBot('de', true);
-  bot
-    .login(testData.login.valid.user, testData.login.valid.pass)
-    .then(function() { t.ok(true, 'Login successfull'); })
-    .then(function() { return bot.logout(); })
-    .then(function() { t.ok(true, 'Logout'); });
-});
-
-test('Clear cart', function(t) {
-  t.plan(3);
-
-  var bot = new AmazonBot('de');
-  bot
-    .login(testData.login.valid.user, testData.login.valid.pass)
-    .then(function() { t.ok(true, 'Login'); })
-    .then(function() { return bot.clearCart(); })
-    .then(function() { t.ok(true, 'Cart empty'); })
-    .then(function() { return bot.logout(); })
-    .then(function() { t.ok(true, 'Logout'); });
-});
-
-test('Add a single item', function(t) {
-  t.plan(7);
-
-  var bot = new AmazonBot('de');
-  bot
-    .login(testData.login.valid.user, testData.login.valid.pass)
-    .then(function() { t.ok(true, 'Login'); })
-    .then(function() { return bot.clearCart(); })
-    .then(function() { t.ok(true, 'Cart empty'); })
-    .then(function() { return bot.addItem('B00NTIALWC'); })
-    .then(function() { t.ok(true, 'Added item'); })
-    .then(function() { return bot.getCartTotal(); })
-    .then(function(total) {
-      t.equal(total.items, 1, 'Cart count');
-      t.equal(total.currency, 'EUR', 'Cart currency');
-      t.equal(total.price, 16.99, 'Cart price');
-    })
-    .then(function() { return bot.logout(); })
-    .then(function() { t.ok(true, 'Logout'); });
-});
-
 test('Add multiple items', function(t) {
-  t.plan(7);
+  t.plan(17);
 
   var bot = new AmazonBot('de');
   bot
@@ -88,6 +42,25 @@ test('Add multiple items', function(t) {
       t.equal(total.currency, 'EUR', 'Cart currency');
       t.equal(total.price, 20.96, 'Cart price');
     })
+    .then(function() { return bot.getCart(); })
+    .then(function(cart) {
+      t.equal(cart.total.items, 2, 'Cart count');
+      t.equal(cart.total.currency, 'EUR', 'Cart currency');
+      t.equal(cart.total.price, 20.96, 'Cart price');
+
+      t.equal(cart.items.length, 2, 'Cart items');
+
+      var item = cart.items[0];
+      t.equal(item.id, 'B00DRYZC1S', 'Item ID');
+      t.equal(item.title, 'Futurama - Season 7 [2 DVDs]', 'Item title');
+      t.equal(item.link, 'https://amazon.de/gp/product/B00DRYZC1S', 'Item Link');
+      t.equal(item.amount, 1, 'Item amount');
+      t.equal(item.currency, 'EUR', 'Item currency');
+      t.equal(item.price, 10.97, 'Item price');
+    })
     .then(function() { return bot.logout(); })
-    .then(function() { t.ok(true, 'Logout'); });
+    .then(function() { t.ok(true, 'Logout'); })
+    .catch(function() {
+      bot.logout();
+    });
 });
