@@ -224,16 +224,13 @@ class AmazonBot {
       return this.horseman
         .userAgent(this.userAgent)
         .open(url)
-        .waitForNextPage()
+        .waitForSelector('input#gc-redemption-input')
         .type('input#gc-redemption-input', code)
         .click('input.a-button-input')
         .waitForNextPage()
-        .then(() => {
-          this.horseman
-            .count('input#gc-redemption-input.a-form-error')
-            .then((count) => {
-              (count === 0 ) ? resolve() : reject('Invalid gift code');
-            });
+        .count('input#gc-redemption-input.a-form-error')
+        .then((count) => {
+          (count === 0 ) ? resolve() : reject('Invalid gift code');
         });
     });
   }
@@ -318,6 +315,7 @@ class AmazonBot {
         .userAgent(this.userAgent)
         .open(url)
         .waitForNextPage()
+        //.waitForSelector('#additional-addresses-and-1-click-settings')
         .evaluate(function() {
           var addresses = [];
 
