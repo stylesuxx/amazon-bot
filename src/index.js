@@ -257,6 +257,24 @@ class AmazonBot {
         });
     });
   }
+
+  getBalance() {
+    var url = this.urls.redeem;
+
+    return new Promise((resolve, reject) => {
+      return this.horseman
+        .userAgent(this.userAgent)
+        .open(url)
+        .waitForNextPage()
+        .text('#gc-current-balance')
+        .then((balance) => {
+          var price = balance.replace(',', '.').trim().split(' ');
+          price = parseFloat(parseFloat(price[0]).toFixed(2));
+
+          resolve(price);
+        });
+    });
+  }
 }
 
 export default AmazonBot;
