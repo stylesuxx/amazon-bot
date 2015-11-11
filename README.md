@@ -43,6 +43,9 @@ Usage comes here
 #### getBalance()
 >Get the current balance - Resolves when succeeded in obtaining balance
 
+#### getTotal()
+>Get the current cart total including shipping - Resolves when payment information is available and succeeded in obtaining total
+
 ## Testing
 Since this is a scraper and relies on the Amazon page not changing, an extensive test suite is provided and may be invoked by running:
 
