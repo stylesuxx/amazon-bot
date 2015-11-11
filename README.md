@@ -19,33 +19,26 @@ Usage comes here
 #### login(username, password)
 >Login with username and password - Resolves when login succeeds.
 
-* logout()
+#### logout()
+>Logout - call this when you are done - Resolves when logout succeeds.
 
-    >Logout - call this when you are done - Resolves when logout succeeds.
+#### addItem(id)
+>Add a single item - Resolves when item could be added
 
-* addItem(id)
+#### addItems(ids)
+>Add multiple items at once, just pass an array of item ids - Resolves when items could be added
 
-    >Add a single item - Resolves when item could be added
+#### getCart()
+>Get details about all items in the shopping cart - Resolves when cart information is available
 
-* addItems(ids)
+#### getCartTotal()
+>Get a summary of all items in the shopping cart - Resolves when cart information is available
 
-    >Add multiple items at once, just pass an array of item ids - Resolves when items could be added
+#### clearCart()
+>Remove all items from the shopping cart - Resolves when succeeded in removing items from the cart
 
-* getCart()
-
-    >Get details about all items in the shopping cart - Resolves when cart information is available
-
-* getCartTotal()
-
-    >Get a summary of all items in the shopping cart - Resolves when cart information is available
-
-* clearCart()
-
-    >Remove all items from the shopping cart - Resolves when succeeded in removing items from the cart
-
-* redeem(code)
-
-    >Redeem a gift code - Resolves when succeeded in redeeming a gift code **Not tested with actual gift code**
+#### redeem(code)
+>Redeem a gift code - Resolves when succeeded in redeeming a gift code **Not tested with actual gift code**
 
 ## Testing
 Since this is a scraper and relies on the Amazon page not changing, an extensive test suite is provided and may be invoked by running:
