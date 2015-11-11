@@ -23,29 +23,21 @@ class AmazonBot {
     const url = this.urls.login;
 
     return new Promise((resolve, reject) => {
+      let loggedIn = false;
+
       return this.horseman
         .userAgent(this.userAgent)
         .open(url)
         .type('input#ap_email', username)
         .type('input#ap_password', password)
         .click('input#signInSubmit-input')
-        .waitForNextPage()
-        .then(() => {
-          this.horseman
-            .count('#nav-your-amazon')
-            .then((count) => {
-              if(count > 0 ) {
-                this.horseman
-                  .cookies()
-                  .then((cookies) => {
-                    this.cookies = cookies;
-                    resolve();
-                  });
-              }
-              else {
-                reject('Login failed');
-              }
-            });
+        .waitForSelector('#nav-your-amazon')
+        .count('#nav-your-amazon')
+        .then((count) => { if(count > 0) loggedIn = true; })
+        .cookies()
+        .then((cookies) => {
+          this.cookies = cookies;
+          (loggedIn) ? resolve() : reject('Login failed');
         });
     });
   }
