@@ -275,6 +275,63 @@ class AmazonBot {
         });
     });
   }
+
+  /* Promise resolves when payment information is available and total could retrieved, otherwise it rejects */
+  getTotal() {
+    var url = this.urls.cart;
+
+    return new Promise((resolve, reject) => {
+      return this.horseman
+        .userAgent(this.userAgent)
+        .open(url)
+        .waitForSelector('input[name="proceedToCheckout"]')
+        .click('input[name="proceedToCheckout"]')
+        .waitForNextPage().waitForNextPage()
+        .click('#address-book-entry-' + 0 + ' a')
+        .waitForNextPage()
+        .click('input[type="submit"]')
+        .waitForNextPage()
+        .count('.aok-hidden input#continue-top-disabled')
+        .then((count) => {
+          if(count > 0) {
+            this.horseman
+              .click('input#continue-top')
+              .waitForNextPage()
+              .evaluate(function() {
+                var price = jQuery('#subtotals-marketplace-table .grand-total-price').text().trim().replace(',', '.').split(' ');
+                var currency = price[0];
+                price = parseFloat(parseFloat(price[1]).toFixed(2));
+
+                var items = jQuery('#subtotals-marketplace-table tbody tr:nth-child(1) td:nth-child(2)').text().trim().replace(',', '.').split(' ');
+                items = parseFloat(parseFloat(items[1]).toFixed(2));
+
+                var shipping = jQuery('#subtotals-marketplace-table tbody tr:nth-child(2) td:nth-child(2)').text().trim().replace(',', '.').split(' ');
+                shipping = parseFloat(parseFloat(shipping[1]).toFixed(2));
+
+                var total = {
+                  items: items,
+                  shipping: shipping,
+                  total: price,
+                  currency: currency
+                };
+
+                return total;
+              })
+              .then(function(total) {
+                if(!total) {
+                  reject('Retreiving total failed')
+                }
+                else {
+                  resolve(total);
+                }
+              });
+          }
+          else {
+            reject('Payment information is missing');
+          }
+        });
+    });
+  }
 }
 
 export default AmazonBot;
