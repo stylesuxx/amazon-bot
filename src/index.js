@@ -19,9 +19,8 @@ class AmazonBot {
     };
   }
 
-  /* Promise resolves when user was logged in successfully, otherwise it rejects */
   login(username, password) {
-    var url = this.urls.login;
+    const url = this.urls.login;
 
     return new Promise((resolve, reject) => {
       return this.horseman
@@ -52,7 +51,7 @@ class AmazonBot {
   }
 
   logout() {
-    var url = this.urls.logout;
+    const url = this.urls.logout;
 
     return this.horseman
       .userAgent(this.userAgent)
@@ -62,12 +61,12 @@ class AmazonBot {
       .close();
   }
 
-  /* Promise resolves when there is one more item in the cart than it was before, otherwise it rejects */
   addItem(id) {
-    var url = this.urls.item + id;
-    var current = 0;
+    const url = this.urls.item + id;
 
     return new Promise((resolve, reject) => {
+      let itemAmount = 0;
+
       return this.horseman
         .userAgent(this.userAgent)
         .cookies(this.cookies)
@@ -75,7 +74,7 @@ class AmazonBot {
         .waitForSelector('form#addToCart')
         .text('#nav-cart-count')
         .then(function(text) {
-          current = parseInt(text.trim());
+          itemAmount = parseInt(text.trim());
         })
         .click('form#addToCart input#add-to-cart-button')
         .waitForNextPage()
@@ -83,13 +82,8 @@ class AmazonBot {
         .waitForNextPage()
         .text('#nav-cart-count')
         .then((text) => {
-          var count = parseInt(text.trim());
-          if(count > current) {
-            resolve();
-          }
-          else {
-            reject('Item not added to cart');
-          }
+          let count = parseInt(text.trim());
+          (count > itemAmount) ? resolve() : reject('Item not added to cart');
         });
     });
   }
@@ -101,29 +95,29 @@ class AmazonBot {
   }
 
   getCartTotal() {
-    var url = this.urls.cart;
-    var total = {
-      price: 0,
-      items: 0,
-      currency: ''
-    };
+    const url = this.urls.cart;
 
     return new Promise((resolve, reject) => {
+      let total = { price: 0, items: 0, currency: '' };
+
       return this.horseman
         .userAgent(this.userAgent)
         .cookies(this.cookies)
         .open(url)
         .waitForNextPage()
         .count('form#activeCartViewForm .sc-list-item')
-        .then(function(items) {
-          total.items = items;
-        })
+        .then(function(items) { total.items = items; })
         .text('form#activeCartViewForm .sc-subtotal .sc-price')
         .then(function(price) {
           var price = price.trim().split(' ');
+
+          if(price.length !== 2) reject('Price could not be parsed');
+
           var currency = price[0];
           price = price[1].replace(',', '.');
           price = parseFloat(parseFloat(price).toFixed(2));
+
+          if(isNaN(price)) reject('Price is not a number');
 
           total.currency = currency;
           total.price = price;
@@ -133,19 +127,12 @@ class AmazonBot {
     });
   }
 
-  /* Promise resolves when cart items could be retreived, otherwise it rejects */
   getCart() {
-    var url = this.urls.cart;
-    var cart = {
-      total: {
-        price: 0,
-        items: 0,
-        currency: ''
-      },
-      items: []
-    };
+    const url = this.urls.cart;
 
     return new Promise((resolve, reject) => {
+      let cart = { total: { price: 0, items: 0, currency: '' }, items: [] };
+
       return this.horseman
         .userAgent(this.userAgent)
         .cookies(this.cookies)
@@ -158,9 +145,14 @@ class AmazonBot {
         .text('form#activeCartViewForm .sc-subtotal .sc-price')
         .then(function(price) {
           var price = price.trim().split(' ');
+
+          if(price.length !== 2) reject('Price could not be parsed');
+
           var currency = price[0];
           price = price[1].replace(',', '.');
           price = parseFloat(parseFloat(price).toFixed(2));
+
+          if(isNaN(price)) reject('Price is not a number');
 
           cart.total.currency = currency;
           cart.total.price = price;
@@ -190,7 +182,10 @@ class AmazonBot {
         }, 'form#activeCartViewForm .sc-list-item', this.baseUrl)
         .then(function(items) {
           if(!items) {
-            reject('Retreiving cart items failed')
+            reject('Retreiving cart items failed');
+          }
+          else if(cart.total.items !== items.length) {
+            reject('Item count does not match items in cart');
           }
           else {
             cart.items = items;
@@ -200,9 +195,8 @@ class AmazonBot {
     });
   }
 
-  /* Promise resolves when there are no more items in the cart, otherwise it rejects */
   clearCart() {
-    var url = this.urls.cart;
+    const url = this.urls.cart;
 
     return new Promise((resolve, reject) => {
       return this.horseman
@@ -222,19 +216,13 @@ class AmazonBot {
         })
         .count('form#activeCartViewForm .sc-list-item .sc-action-delete input')
         .then((count) => {
-          if(count === 0) {
-            resolve();
-          }
-          else {
-            reject('Items left in cart');
-          }
+          (count === 0) ? resolve() : reject('Items left in cart');
         });
     });
   }
 
-  /* Promise resolves when code was successfully redeemed, otherwise it rejects */
   redeem(code) {
-    var url = this.urls.redeem;
+    const url = this.urls.redeem;
 
     return new Promise((resolve, reject) => {
       return this.horseman
@@ -248,19 +236,14 @@ class AmazonBot {
           this.horseman
             .count('input#gc-redemption-input.a-form-error')
             .then((count) => {
-              if(count === 0 ) {
-                resolve();
-              }
-              else {
-                reject('Invalid gift code');
-              }
+              (count === 0 ) ? resolve() : reject('Invalid gift code');
             });
         });
     });
   }
 
   getBalance() {
-    var url = this.urls.redeem;
+    const url = this.urls.redeem;
 
     return new Promise((resolve, reject) => {
       return this.horseman
@@ -270,6 +253,9 @@ class AmazonBot {
         .text('#gc-current-balance')
         .then((balance) => {
           var price = balance.replace(',', '.').trim().split(' ');
+
+          if(price.length !== 2) reject('Price could not be parsed');
+
           price = parseFloat(parseFloat(price[0]).toFixed(2));
 
           resolve(price);
@@ -277,9 +263,8 @@ class AmazonBot {
     });
   }
 
-  /* Promise resolves when payment information is available and total could retrieved, otherwise it rejects */
   getTotal() {
-    var url = this.urls.cart;
+    const url = this.urls.cart;
 
     return new Promise((resolve, reject) => {
       return this.horseman
@@ -294,7 +279,10 @@ class AmazonBot {
         .waitForNextPage()
         .count('.aok-hidden input#continue-top-disabled')
         .then((count) => {
-          if(count > 0) {
+          if(count === 0) {
+            reject('Payment information or address missing');
+          }
+          else {
             this.horseman
               .click('input#continue-top')
               .waitForNextPage()
@@ -319,23 +307,15 @@ class AmazonBot {
                 return total;
               })
               .then(function(total) {
-                if(!total) {
-                  reject('Retreiving total failed')
-                }
-                else {
-                  resolve(total);
-                }
+                (total) ? resolve(total) : reject('Retreiving total failed');
               });
-          }
-          else {
-            reject('Payment information or address missing');
           }
         });
     });
   }
 
   getAddresses() {
-    var url = this.urls.addresses;
+    const url = this.urls.addresses;
 
     return new Promise((resolve, reject) => {
       return this.horseman
@@ -366,12 +346,7 @@ class AmazonBot {
           return addresses;
         })
         .then(function(addresses) {
-          if(addresses) {
-            resolve(addresses);
-          }
-          else {
-            reject('Could not obtain addresses');
-          }
+          (addresses) ? resolve(addresses) : reject('Could not obtain addresses');
         });
     });
   }
