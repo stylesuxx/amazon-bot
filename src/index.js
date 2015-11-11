@@ -131,6 +131,73 @@ class AmazonBot {
     });
   }
 
+  /* Promise resolves when cart items could be retreived, otherwise it rejects */
+  getCart() {
+    var url = this.urls.cart;
+    var cart = {
+      total: {
+        price: 0,
+        items: 0,
+        currency: ''
+      },
+      items: []
+    };
+
+    return new Promise((resolve, reject) => {
+      return this.horseman
+        .userAgent(this.userAgent)
+        .cookies(this.cookies)
+        .open(url)
+        .waitForNextPage()
+        .count('form#activeCartViewForm .sc-list-item')
+        .then(function(items) {
+          cart.total.items = items;
+        })
+        .text('form#activeCartViewForm .sc-subtotal .sc-price')
+        .then(function(price) {
+          var price = price.trim().split(' ');
+          var currency = price[0];
+          price = price[1].replace(',', '.');
+          price = parseFloat(parseFloat(price).toFixed(2));
+
+          cart.total.currency = currency;
+          cart.total.price = price;
+        })
+        .open(url)
+        .evaluate(function(selector, baseUrl) {
+          var items = new Array();
+
+          jQuery(selector).each(function() {
+            var price = jQuery('.sc-product-price', this).text().trim().replace(',', '.').split(' ');
+            var currency = price[0];
+            price = parseFloat(parseFloat(price[1]).toFixed(2));
+
+            var current = {
+              id: jQuery(this).attr('data-asin'),
+              title: jQuery('.a-list-item a.sc-product-link .sc-product-title', this).text().trim(),
+              link: baseUrl + '/gp/product/' + jQuery(this).attr('data-asin'),
+              amount: parseInt(jQuery('.a-dropdown-prompt', this).text().trim()),
+              currency: currency,
+              price: price
+            }
+
+            items.push(current);
+          });
+
+          return items;
+        }, 'form#activeCartViewForm .sc-list-item', this.baseUrl)
+        .then(function(items) {
+          if(!items) {
+            reject('Retreiving cart items failed')
+          }
+          else {
+            cart.items = items;
+            resolve(cart);
+          }
+        });
+    });
+  }
+
   /* Promise resolves when there are no more items in the cart, otherwise it rejects */
   clearCart() {
     var url = this.urls.cart;
