@@ -20,6 +20,7 @@ Usage comes here
 * logout()
 * addItem(id)
 * addItems(ids)
+* getCart()
 * getCartTotal()
 * clearCart()
 
