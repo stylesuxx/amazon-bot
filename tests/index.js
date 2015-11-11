@@ -80,3 +80,18 @@ test('Redeem invalid gift code', function(t) {
     .then(function() { return bot.logout(); })
     .then(function() { t.ok(true, 'Logout'); });
 });
+
+test('Check balance', function(t) {
+  t.plan(3);
+
+  var bot = new AmazonBot('de', true);
+  bot
+    .login(testData.login.valid.user, testData.login.valid.pass)
+    .then(function() { t.ok(true, 'Login'); })
+    .then(function() { return bot.getBalance(); })
+    .then(function(balance) {
+      t.equals(balance, 0.00, 'Balance');
+    })
+    .then(function() { return bot.logout(); })
+    .then(function() { t.ok(true, 'Logout'); });
+});
