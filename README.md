@@ -38,7 +38,7 @@ Usage comes here
 >Remove all items from the shopping cart - Resolves when succeeded in removing items from the cart
 
 #### redeem(code)
->Redeem a gift code - Resolves when succeeded in redeeming a gift code **Not tested with actual gift code**
+>Redeem a gift code - Resolves when succeeded in redeeming a gift code **Not tested with an actual gift code - if you do, please let me know in the issues**
 
 ## Testing
 Since this is a scraper and relies on the Amazon page not changing, an extensive test suite is provided and may be invoked by running:
