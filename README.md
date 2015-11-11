@@ -17,21 +17,36 @@ Usage comes here
 
 ## Available methods
 * login(username, password)
+
     Login with username and password.
+
 * logout()
+
     Logout - call this when you are done.
+
 * addItem(id)
+
     Add a single item.
+
 * addItems(ids)
+
     Add multiple items at once, just pass an array of item ids.
+
 * getCart()
+
     Get details about all items in the shopping cart.
+
 * getCartTotal()
+
     Get a summary of all items in the shopping cart.
+
 * clearCart()
+
     Remove all items from the shopping cart.
+
 * redeem(code)
-    Redeem a gift code. **not tested with actual gift code**
+
+    Redeem a gift code. **Not tested with actual gift code**
 
 ## Testing
 Since this is a scraper and relies on the Amazon page not changing, an extensive test suite is provided and may be invoked by running:
