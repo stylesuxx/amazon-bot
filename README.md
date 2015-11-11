@@ -40,6 +40,9 @@ Usage comes here
 #### redeem(code)
 >Redeem a gift code - Resolves when succeeded in redeeming a gift code **Not tested with an actual gift code - if you do, please let me know in the issues**
 
+#### getBalance()
+>Get the current balance - Resolves when succeeded in obtaining balance
+
 ## Testing
 Since this is a scraper and relies on the Amazon page not changing, an extensive test suite is provided and may be invoked by running:
 
