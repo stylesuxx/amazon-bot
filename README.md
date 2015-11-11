@@ -55,3 +55,7 @@ Since this is a scraper and relies on the Amazon page not changing, an extensive
     npm run test
 
 Make sure you have your amazon login set as environment variables *AMAZON_USER* and *AMAZON_PASS*.
+
+## Todo
+- [] remove item by id from cart
+- [] checkout with id for address
