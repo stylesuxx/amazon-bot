@@ -14,7 +14,8 @@ class AmazonBot {
       logout: this.baseUrl + '/gp/flex/sign-out.html',
       item: this.baseUrl + '/gp/product/',
       cart: this.baseUrl + '/gp/cart/view.html',
-      redeem: this.baseUrl + '/gc/redeem/'
+      redeem: this.baseUrl + '/gc/redeem/',
+      addresses: this.baseUrl + '/gp/css/account/address/view.html'
     };
   }
 
@@ -328,6 +329,48 @@ class AmazonBot {
           }
           else {
             reject('Payment information or address missing');
+          }
+        });
+    });
+  }
+
+  getAddresses() {
+    var url = this.urls.addresses;
+
+    return new Promise((resolve, reject) => {
+      return this.horseman
+        .userAgent(this.userAgent)
+        .open(url)
+        .waitForNextPage()
+        .evaluate(function() {
+          var addresses = [];
+
+          addresses.push({
+            name: jQuery('#address-index-0 li.displayAddressFullName').text().trim(),
+            address1: jQuery('#address-index-0 li.displayAddressAddressLine1').text().trim(),
+            address2: jQuery('#address-index-0 li.displayAddressAddressLine2').text().trim(),
+            city: jQuery('#address-index-0 li.displayAddressCityStateOrRegionPostalCode').text().trim(),
+            country: jQuery('#address-index-0 li.displayAddressCountryName').text().trim()
+          });
+
+          jQuery('#additional-addresses-and-1-click-settings .displayAddressUL').each(function() {
+            addresses.push({
+              name: jQuery('li.displayAddressFullName', this).text().trim(),
+              address1: jQuery('li.displayAddressAddressLine1', this).text().trim(),
+              address2: jQuery('li.displayAddressAddressLine2', this).text().trim(),
+              city: jQuery('li.displayAddressCityStateOrRegionPostalCode', this).text().trim(),
+              country: jQuery('li.displayAddressCountryName', this).text().trim()
+            });
+          });
+
+          return addresses;
+        })
+        .then(function(addresses) {
+          if(addresses) {
+            resolve(addresses);
+          }
+          else {
+            reject('Could not obtain addresses');
           }
         });
     });
