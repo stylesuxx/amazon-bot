@@ -13,7 +13,8 @@ class AmazonBot {
       login: this.baseUrl + '/ap/signin?openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0&openid.mode=checkid_setup&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.assoc_handle=deflex&openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select',
       logout: this.baseUrl + '/gp/flex/sign-out.html',
       item: this.baseUrl + '/gp/product/',
-      cart: this.baseUrl + '/gp/cart/view.html'
+      cart: this.baseUrl + '/gp/cart/view.html',
+      redeem: this.baseUrl + '/gc/redeem/'
     };
   }
 
@@ -226,6 +227,33 @@ class AmazonBot {
           else {
             reject('Items left in cart');
           }
+        });
+    });
+  }
+
+  /* Promise resolves when code was successfully redeemed, otherwise it rejects */
+  redeem(code) {
+    var url = this.urls.redeem;
+
+    return new Promise((resolve, reject) => {
+      return this.horseman
+        .userAgent(this.userAgent)
+        .open(url)
+        .waitForNextPage()
+        .type('input#gc-redemption-input', code)
+        .click('input.a-button-input')
+        .waitForNextPage()
+        .then(() => {
+          this.horseman
+            .count('input#gc-redemption-input.a-form-error')
+            .then((count) => {
+              if(count === 0 ) {
+                resolve();
+              }
+              else {
+                reject('Invalid gift code');
+              }
+            });
         });
     });
   }
