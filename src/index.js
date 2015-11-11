@@ -71,13 +71,13 @@ class AmazonBot {
         .userAgent(this.userAgent)
         .cookies(this.cookies)
         .open(url)
-        .waitForSelector('form#addToCart') // TODO: removing this should not change anything
+        .waitForSelector('form#addToCart')
         .text('#nav-cart-count')
         .then(function(text) { itemAmount = parseInt(text.trim()); })
         .click('form#addToCart input#add-to-cart-button')
-        .waitForNextPage()  // TODO: should be enough to wait for a selector
-        .open(this.baseUrl) // -------
-        .waitForNextPage()  // -------
+        .waitForNextPage()
+        .open(this.baseUrl)
+        .waitForNextPage()
         .text('#nav-cart-count')
         .then((text) => {
           let count = parseInt(text.trim());
