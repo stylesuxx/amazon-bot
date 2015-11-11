@@ -57,5 +57,6 @@ Since this is a scraper and relies on the Amazon page not changing, an extensive
 Make sure you have your amazon login set as environment variables *AMAZON_USER* and *AMAZON_PASS*.
 
 ## Todo
-- [ ] remove item by id from cart
+- [ ] remove single item from cart
+- [ ] remove multiple items from cart
 - [ ] checkout with id for address
