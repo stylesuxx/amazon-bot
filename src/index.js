@@ -100,7 +100,7 @@ class AmazonBot {
         .userAgent(this.userAgent)
         .cookies(this.cookies)
         .open(url)
-        .waitForNextPage()
+        .waitForSelector('form#activeCartViewForm .sc-subtotal .sc-price')
         .count('form#activeCartViewForm .sc-list-item')
         .then(function(items) { total.items = items; })
         .text('form#activeCartViewForm .sc-subtotal .sc-price')
