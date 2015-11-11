@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "rm -rf lib",
     "build": "npm run clean && ./node_modules/.bin/babel src --out-dir lib",
-    "test": "npm run build && node ./tests/index.js | faucet",
+    "test": "npm run build && node ./tests/index.js",
     "lint": "./node_modules/.bin/eslint src",
     "prepublish": "npm run build",
     "preversion": "npm test"
@@ -15,7 +15,8 @@
   "license": "ISC",
   "dependencies": {
     "bluebird": "^3.0.5",
-    "node-horseman": "^2.8.1"
+    "node-horseman": "^2.8.1",
+    "phantomjs": "^1.9.18"
   },
   "devDependencies": {
     "babel": "^5.8.23",
