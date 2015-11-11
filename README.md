@@ -16,13 +16,32 @@ Usage comes here
 ```
 
 ## Available methods
-* login(username, password)
-* logout()
-* addItem(id)
-* addItems(ids)
-* getCart()
-* getCartTotal()
-* clearCart()
+#### login(username, password)
+>Login with username and password - Resolves when login succeeds.
+
+#### logout()
+>Logout - call this when you are done - Resolves when logout succeeds.
+
+#### addItem(id)
+>Add a single item - Resolves when item could be added
+
+#### addItems(ids)
+>Add multiple items at once, just pass an array of item ids - Resolves when items could be added
+
+#### getCart()
+>Get details about all items in the shopping cart - Resolves when cart information is available
+
+#### getCartTotal()
+>Get a summary of all items in the shopping cart - Resolves when cart information is available
+
+#### clearCart()
+>Remove all items from the shopping cart - Resolves when succeeded in removing items from the cart
+
+#### redeem(code)
+>Redeem a gift code - Resolves when succeeded in redeeming a gift code **Not tested with an actual gift code - if you do, please let me know in the issues**
+
+#### getBalance()
+>Get the current balance - Resolves when succeeded in obtaining balance
 
 ## Testing
 Since this is a scraper and relies on the Amazon page not changing, an extensive test suite is provided and may be invoked by running:

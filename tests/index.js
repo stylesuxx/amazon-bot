@@ -11,6 +11,9 @@ var testData = {
       user: 'invalid',
       pass: 'invalid'
     }
+  },
+  code: {
+    invalid: 'invalid'
   }
 }
 
@@ -63,4 +66,32 @@ test('Add multiple items', function(t) {
     .catch(function() {
       bot.logout();
     });
+});
+
+test('Redeem invalid gift code', function(t) {
+  t.plan(3);
+
+  var bot = new AmazonBot('de', true);
+  bot
+    .login(testData.login.valid.user, testData.login.valid.pass)
+    .then(function() { t.ok(true, 'Login'); })
+    .then(function() { return bot.redeem(testData.code.invalid); })
+    .then(function() {}, function(err) { t.equals(err, 'Invalid gift code', 'Redeeming failed'); })
+    .then(function() { return bot.logout(); })
+    .then(function() { t.ok(true, 'Logout'); });
+});
+
+test('Check balance', function(t) {
+  t.plan(3);
+
+  var bot = new AmazonBot('de', true);
+  bot
+    .login(testData.login.valid.user, testData.login.valid.pass)
+    .then(function() { t.ok(true, 'Login'); })
+    .then(function() { return bot.getBalance(); })
+    .then(function(balance) {
+      t.equals(balance, 0.00, 'Balance');
+    })
+    .then(function() { return bot.logout(); })
+    .then(function() { t.ok(true, 'Logout'); });
 });
