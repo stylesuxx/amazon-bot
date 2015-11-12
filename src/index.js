@@ -265,10 +265,11 @@ class AmazonBot {
         .open(url)
         .waitForSelector('input[name="proceedToCheckout"]')
         .click('input[name="proceedToCheckout"]')
-        .waitForNextPage().waitForNextPage()
-        .click('#address-book-entry-' + 0 + ' a')
-        .waitForNextPage()
-        .click('input[type="submit"]')
+        //.waitForNextPage().waitForNextPage()
+        .waitForSelector('#address-book-entry-0')
+        .click('#address-book-entry-0 a')
+        .waitForNextPage('.a-button-primary input[type="submit"]')
+        .click('.a-button-primary input[type="submit"]')
         .waitForNextPage()
         .count('.aok-hidden input#continue-top-disabled')
         .then((count) => {
@@ -278,7 +279,7 @@ class AmazonBot {
           else {
             this.horseman
               .click('input#continue-top')
-              .waitForNextPage()
+              .waitForSelector('#subtotals-marketplace-table .grand-total-price')
               .evaluate(function() {
                 var price = jQuery('#subtotals-marketplace-table .grand-total-price').text().trim().replace(',', '.').split(' ');
                 var currency = price[0];
