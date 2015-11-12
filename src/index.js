@@ -242,7 +242,7 @@ class AmazonBot {
       return this.horseman
         .userAgent(this.userAgent)
         .open(url)
-        .waitForNextPage()
+        .waitForSelector('#gc-current-balance')
         .text('#gc-current-balance')
         .then((balance) => {
           var price = balance.replace(',', '.').trim().split(' ');
