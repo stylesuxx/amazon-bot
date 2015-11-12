@@ -315,8 +315,7 @@ class AmazonBot {
       return this.horseman
         .userAgent(this.userAgent)
         .open(url)
-        .waitForNextPage()
-        //.waitForSelector('#additional-addresses-and-1-click-settings')
+        .waitForSelector('#additional-addresses-and-1-click-settings')
         .evaluate(function() {
           var addresses = [];
 
