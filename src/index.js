@@ -341,7 +341,7 @@ class AmazonBot {
     const url = this.urls.cart;
 
     return new Promise((resolve, reject) => {
-      this.horseman
+      return this.horseman
         .userAgent(this.userAgent)
         .cookies(this.cookies)
         .open(url)
@@ -353,6 +353,10 @@ class AmazonBot {
           (count === 0) ? resolve() : reject('Could not remove item');
         });
     });
+  }
+
+  removeItems(ids) {
+    return Promise.each(ids, (id) => { return this.removeItem(id); });
   }
 }
 
