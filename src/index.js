@@ -336,6 +336,24 @@ class AmazonBot {
         });
     });
   }
+
+  removeItem(id) {
+    const url = this.urls.cart;
+
+    return new Promise((resolve, reject) => {
+      this.horseman
+        .userAgent(this.userAgent)
+        .cookies(this.cookies)
+        .open(url)
+        .waitForSelector('div[data-asin="' + id + '"] .sc-action-delete input')
+        .click('div[data-asin="' + id + '"] .sc-action-delete input')
+        .waitForNextPage().waitForNextPage()
+        .count('div[data-asin="' + id + '"] .sc-action-delete input')
+        .then((count) => {
+          (count === 0) ? resolve() : reject('Could not remove item');
+        });
+    });
+  }
 }
 
 export default AmazonBot;
