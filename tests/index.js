@@ -28,8 +28,8 @@ test('Login with invalid credentials', function(t) {
     .then(function() { t.ok(true, 'Logout'); });
 });
 
-test('Add multiple items', function(t) {
-  t.plan(21);
+test('Cart functionality', function(t) {
+  t.plan(22);
 
   var bot = new AmazonBot('de');
   bot
@@ -37,8 +37,10 @@ test('Add multiple items', function(t) {
     .then(function() { t.ok(true, 'Login'); })
     .then(function() { return bot.clearCart(); })
     .then(function() { t.ok(true, 'Cart empty'); })
-    .then(function() { return bot.addItems(['B008MFXJCQ', 'B00DRYZC1S']); })
+    .then(function() { return bot.addItems(['B00B1ZSX4S', 'B00B1ZSXCA', 'B008MFXJCQ', 'B00DRYZC1S']); })
     .then(function() { t.ok(true, 'Added items'); })
+    .then(function() { return bot.removeItems(['B00B1ZSX4S', 'B00B1ZSXCA']); })
+    .then(function() { t.ok(true, 'Removed items'); })
     .then(function() { return bot.getCartTotal(); })
     .then(function(total) {
       t.equal(total.items, 2, 'Cart count');
@@ -70,6 +72,7 @@ test('Add multiple items', function(t) {
     })
     .then(function() { return bot.logout(); })
     .then(function() { t.ok(true, 'Logout'); })
+    .then(function() { return bot.close(); })
     .catch(function(err) {
       console.log('Rejected with reason:', err);
       bot.logout();
