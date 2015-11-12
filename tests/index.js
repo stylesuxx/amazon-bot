@@ -29,7 +29,7 @@ test('Login with invalid credentials', function(t) {
 });
 
 test('Add multiple items', function(t) {
-  t.plan(17);
+  t.plan(21);
 
   var bot = new AmazonBot('de');
   bot
@@ -61,9 +61,17 @@ test('Add multiple items', function(t) {
       t.equal(item.currency, 'EUR', 'Item currency');
       t.equal(item.price, 10.97, 'Item price');
     })
+    .then(function() { return bot.getTotal(); })
+    .then(function(total) {
+      t.equals(total.items, 21.14, 'Items');
+      t.equals(total.shipping, 0, 'Shipping');
+      t.equals(total.total, 21.14, 'Total');
+      t.equals(total.currency, 'EUR', 'Currency');
+    })
     .then(function() { return bot.logout(); })
     .then(function() { t.ok(true, 'Logout'); })
-    .catch(function() {
+    .catch(function(err) {
+      console.log('Rejected with reason:', err);
       bot.logout();
     });
 });
@@ -91,6 +99,26 @@ test('Check balance', function(t) {
     .then(function() { return bot.getBalance(); })
     .then(function(balance) {
       t.equals(balance, 0.00, 'Balance');
+    })
+    .then(function() { return bot.logout(); })
+    .then(function() { t.ok(true, 'Logout'); });
+});
+
+test('Check addresses', function(t) {
+  t.plan(6);
+
+  var bot = new AmazonBot('de', true);
+  bot
+    .login(testData.login.valid.user, testData.login.valid.pass)
+    .then(function() { t.ok(true, 'Login'); })
+    .then(function() { return bot.getAddresses(); })
+    .then(function(addresses) {
+      var address = addresses[0];
+
+      t.ok(address.name, 'Name');
+      t.ok((address.address1 || address.address2), 'Address');
+      t.ok(address.city, 'City');
+      t.ok(address.country, 'Country');
     })
     .then(function() { return bot.logout(); })
     .then(function() { t.ok(true, 'Logout'); });
