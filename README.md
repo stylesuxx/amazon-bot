@@ -35,6 +35,12 @@ Usage comes here
 #### addItems(ids)
 >Add multiple items at once. *ids* is an array of product id's - Resolves when items could be added
 
+#### removeItem(id)
+>Removes an item from the cart by its product *id* - Resolves when item could be removed
+
+#### removeItems(ids)
+>Removes multiple items from the cart at once. *ids* is an array of product id's - Resolves when items could be removed
+
 #### getCart()
 >Get details about all items in the shopping cart - Resolves when cart information is available
 
