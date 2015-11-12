@@ -319,15 +319,7 @@ class AmazonBot {
         .evaluate(function() {
           var addresses = [];
 
-          addresses.push({
-            name: jQuery('#address-index-0 li.displayAddressFullName').text().trim(),
-            address1: jQuery('#address-index-0 li.displayAddressAddressLine1').text().trim(),
-            address2: jQuery('#address-index-0 li.displayAddressAddressLine2').text().trim(),
-            city: jQuery('#address-index-0 li.displayAddressCityStateOrRegionPostalCode').text().trim(),
-            country: jQuery('#address-index-0 li.displayAddressCountryName').text().trim()
-          });
-
-          jQuery('#additional-addresses-and-1-click-settings .displayAddressUL').each(function() {
+          jQuery('#address-index-0, #additional-addresses-and-1-click-settings .displayAddressUL').each(function() {
             addresses.push({
               name: jQuery('li.displayAddressFullName', this).text().trim(),
               address1: jQuery('li.displayAddressAddressLine1', this).text().trim(),
